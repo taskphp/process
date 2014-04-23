@@ -5,7 +5,7 @@ namespace Task\Plugin;
 use Task\Plugin\Process\ProcessBuilder;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProcessPlugin implements PluginInterface, WritableInterface
+class ProcessPlugin implements PluginInterface
 {
     public function build($command, array $args = [])
     {
