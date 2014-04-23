@@ -8,8 +8,6 @@ use Task\Plugin\Stream\ReadableInterface;
 
 class Process extends BaseProcess implements WritableInterface, ReadableInterface
 {
-    protected $stream;
-
     public static function extend(BaseProcess $proc)
     {
         return new static(
@@ -24,13 +22,6 @@ class Process extends BaseProcess implements WritableInterface, ReadableInterfac
 
     public function run($callback = null)
     {
-        if ($this->stream) {
-            $stream = $this->stream;
-            $callback = function ($type, $data) use ($stream) {
-                $stream->write($data);
-            };
-        }
-
         $exitcode = parent::run($callback);
 
         if ($this->isSuccessful()) {
@@ -62,7 +53,10 @@ class Process extends BaseProcess implements WritableInterface, ReadableInterfac
 
     public function pipe(WritableInterface $to)
     {
-        $this->stream = $to;
-        return $to->write($this->read());
+        $this->run(function ($type, $data) use ($to) {
+            $to->write($data);
+        });
+
+        return $to;
     }
 }
