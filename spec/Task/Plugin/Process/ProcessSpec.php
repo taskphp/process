@@ -5,6 +5,7 @@ namespace spec\Task\Plugin\Process;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Task\Plugin\Stream\WritableInterface;
+use Task\Plugin\Process\Process;
 
 class ProcessSpec extends ObjectBehavior
 {
@@ -37,8 +38,8 @@ class ProcessSpec extends ObjectBehavior
 
     function it_should_write_read_data_on_pipe(WritableInterface $to)
     {
-        $to->write(`whoami`)->willReturn('me');
-        $this->pipe($to)->shouldEqual('me');
+        $to->write(`whoami`)->shouldBeCalled();
+        $this->pipe($to)->shouldEqual($to);
     }
 
     function it_should_set_stdin_on_write_and_return_this()

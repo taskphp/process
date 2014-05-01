@@ -1,0 +1,46 @@
+<?php
+
+require 'vendor/autoload.php';
+
+use Task\Plugin\PhpSpecPlugin;
+use Task\Plugin\PHPUnitPlugin;
+
+$project = new Task\Project('task/process');
+
+$project->inject(function ($container) {
+    $container['phpspec'] = new PhpSpecPlugin;
+    $container['phpunit'] = new PHPUnitPlugin;
+});
+
+$project->addTask('phpspec', ['phpspec', function ($phpspec) {
+    $phpspec->command('run')
+        ->setFormat('pretty')
+        ->pipe($this->getOutput());
+}]);
+
+$project->addTask('phpunit', ['phpunit', function ($phpunit) {
+    $phpunit->getCommand()
+        ->setBootstrap('vendor/autoload.php')
+        ->setTestCase('tests/src')
+        ->pipe($this->getOutput());
+}]);
+
+$project->addTask('test', function () use ($project) {
+    $filter = new PHP_CodeCoverage_Filter;
+    $filter->addDirectoryToWhitelist(__DIR__.'/src');
+    $coverage = new PHP_CodeCoverage(null, $filter);
+    $coverage->start('task/process');
+
+    $output = $this->getOutput();
+    $project->runTask('phpunit', $output);
+    $project->runTask('phpspec', $output);
+
+    $coverage->stop();
+
+    $output->writeln('');
+    $output->writeln('Generating coverage...');
+    $html = new PHP_CodeCoverage_Report_HTML;
+    $html->process($coverage, 'coverage');
+});
+
+return $project;

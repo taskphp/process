@@ -14,7 +14,9 @@ class ProcessBuilder extends BaseProcessBuilder implements WritableInterface
 
     public function run()
     {
-        return $this->getProcess()->run();
+        $proc = $this->getProcess();
+        $proc->run();
+        return $proc;
     }
 
     public function read()
@@ -24,11 +26,12 @@ class ProcessBuilder extends BaseProcessBuilder implements WritableInterface
 
     public function write($data)
     {
-        return $this->setInput($data)->getProcess();
+        $this->setInput($data);
+        return $this->run();
     }
 
     public function pipe(WritableInterface $to)
     {
-        return $to->write($this->read());
+        return $this->getProcess()->pipe($to);
     }
 }

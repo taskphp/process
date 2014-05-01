@@ -14,21 +14,14 @@ class ProcessPlugin implements PluginInterface
             ->setArguments($args);
     }
 
-    public function run($command, array $args = [], $cwd = null, array $env = [], OutputInterface $output = null)
+    public function run($command, array $args = [], $cwd = null, array $env = [])
     {
         $proc = $this->build($command, $args)
             ->setWorkingDirectory($cwd)
             ->addEnvironmentVariables($env)
             ->getProcess();
 
-        $callback = null;
-        if (isset($output)) {
-            $callback = function ($type, $buffer) use ($output) {
-                $output->writeln($buffer);
-            };
-        }
-
-        $proc->run($callback);
+        $proc->run();
 
         return $proc;
     }

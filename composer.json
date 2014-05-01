@@ -13,7 +13,10 @@
         "symfony/process": "~2.4"
     },
     "require-dev": {
-        "phpspec/phpspec": "2.0.*@dev"
+        "task/task": "~0.1",
+        "task/phpspec": "~0.1",
+        "task/phpunit": "~0.1",
+        "phpunit/php-code-coverage": "~2.1"
     },
     "autoload": {
         "psr-4": {
