@@ -25,18 +25,18 @@ $project->addTask('phpunit', ['phpunit', function ($phpunit) {
         ->pipe($this->getOutput());
 }]);
 
-$project->addTask('test', function () use ($project) {
+$project->addTask('test', function () {
     $filter = new PHP_CodeCoverage_Filter;
     $filter->addDirectoryToWhitelist(__DIR__.'/src');
     $coverage = new PHP_CodeCoverage(null, $filter);
     $coverage->start('task/process');
 
-    $output = $this->getOutput();
-    $project->runTask('phpunit', $output);
-    $project->runTask('phpspec', $output);
+    $this->runTask('phpunit');
+    $this->runTask('phpspec');
 
     $coverage->stop();
 
+    $output = $this->getOutput();
     $output->writeln('');
     $output->writeln('Generating coverage...');
     $html = new PHP_CodeCoverage_Report_HTML;
