@@ -41,6 +41,8 @@ $project->addTask('test', function () {
     $output->writeln('Generating coverage...');
     $html = new PHP_CodeCoverage_Report_HTML;
     $html->process($coverage, 'coverage');
+    $clover = new PHP_CodeCoverage_Report_Clover;
+    $clover->process($coverage, 'coverage.xml');
 });
 
 return $project;
