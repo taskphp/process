@@ -16,7 +16,8 @@
         "task/task": "~0.1",
         "task/phpspec": "~0.1",
         "task/phpunit": "~0.1",
-        "phpunit/php-code-coverage": "~2.1"
+        "phpunit/php-code-coverage": "~2.1",
+        "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
         "psr-4": {
